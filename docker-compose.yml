@@ -1,0 +1,22 @@
+services:
+  ofm:
+    image: ghcr.io/sebrinass/free-model-docker:latest
+    restart: unless-stopped
+    # 18901 = LAN relay bound to 0.0.0.0 — the only port Octopus needs.
+    # 18900 (local inference + admin UI) is loopback-only by upstream design
+    # and is deliberately NOT published.
+    ports:
+      - "18901:18901"
+    volumes:
+      - /mnt/user/appdata/ofm:/data
+    environment:
+      - OFM_HOME=/data
+    networks:
+      - octopus-net
+
+networks:
+  # NOTE: must be created on Unraid first: docker network create octopus-net
+  # Alternative: skip the network and let Octopus use the host IP
+  # (http://192.168.1.3:18901) instead.
+  octopus-net:
+    external: true

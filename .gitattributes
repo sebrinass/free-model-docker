@@ -1,0 +1,2 @@
+# Keep shell scripts LF so they work inside the container and in CI
+*.sh text eol=lf
